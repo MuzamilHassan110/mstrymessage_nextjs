@@ -32,10 +32,7 @@ import mongoose from "mongoose";
 
 const dbConnection = async(): Promise<void> => {
         const isConnected = await mongoose.connection.readyState;
-        if (isConnected === 0) {
-            console.log("Database is disconnected");
-            return;
-        }  // 1 is connected, 2 is connecting
+      
         
         if (isConnected === 1) {
             console.log("Database is already connected");

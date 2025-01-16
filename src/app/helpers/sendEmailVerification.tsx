@@ -23,3 +23,5 @@ const sendEmailVerification = async (
         return { message: "Error sending email verification", success: false };
     }
 }
+
+export default sendEmailVerification;

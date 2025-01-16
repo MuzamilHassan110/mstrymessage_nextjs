@@ -1,18 +1,12 @@
 // components/email/EmailTemplate.tsx
-
 import React from "react";
 import {
   Html,
   Head,
-  Font,
-  Section,
-  Preview,
   Body,
   Container,
-  Heading,
-  Row,
-  Text,
-  Button,
+  Heading,  
+  Text, 
 } from "@react-email/components";
 
 export type EmailTemplateProps = {
