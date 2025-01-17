@@ -43,37 +43,36 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-
   ],
   pages: {
-    signIn: '/sing-in',
+    signIn: "/sing-in",
   },
   session: {
-      strategy: "jwt"
+    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
 
   // Here Next Auth work with Session and so we put the max data inside the session object
   // and also avoid the again and again calls of the database
-  
+
   callbacks: {
-async session({ session, token }) {
-        if(token){
-          session.user._id = token?._id;
-          session.user.isVerified = token?.isVerified;
-          session.user.isAcceptingMessages = token?.isAcceptingMessages;
-          session.user.username = token?.username;
-        }
-      return session
+    async session({ session, token }) {
+      if (token) {
+        session.user._id = token?._id;
+        session.user.isVerified = token?.isVerified;
+        session.user.isAcceptingMessages = token?.isAcceptingMessages;
+        session.user.username = token?.username;
+      }
+      return session;
     },
     async jwt({ token, user }) {
-      if(user){
+      if (user) {
         token._id = user._id?.toString();
         token.isVerified = user.isVerified;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;
       }
-      return token
-    }
-  }
+      return token;
+    },
+  },
 };
