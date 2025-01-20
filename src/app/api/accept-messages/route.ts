@@ -57,7 +57,7 @@ export async function GET() {
     }
     return ResponseHelper.jsonResponse(`User found ${foundUser}`, 201);
   } catch (error) {
-    console.error("Unauthenticated user in Geting in Messages", error);
+    console.error("Unauthenticated user in Getting in Messages", error);
     return ResponseHelper.jsonResponse("Error authenticating user", 500);
   }
 }
