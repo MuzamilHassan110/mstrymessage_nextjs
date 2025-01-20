@@ -1,6 +1,5 @@
 import UserModal from "@/app/models/user.modal";
 import dbConnection from "@/app/lib/dbConnection";
-import { messageSchema } from "@/app/schemas/messageSchema";
 import { Message } from "@/app/models/user.modal";
 import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 
