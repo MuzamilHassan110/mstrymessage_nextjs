@@ -48,6 +48,10 @@ const userSchema: Schema<User> = new Schema({
         required: true,
         minlength: 8
     },
+    isAcceptingMessage: {
+        type: Boolean,
+        default: true
+    },
     messages: [messageSchema],
     verifyCode: {
         type: String,
