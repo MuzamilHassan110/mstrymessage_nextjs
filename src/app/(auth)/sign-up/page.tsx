@@ -79,7 +79,7 @@ const page = () => {
           ? "You have successfully signed up!"
           : "Error signing up",
       });
-      router.replace(`/verify/${username}`);
+      router.replace(`/verify-code/${username}`);
       setIsSubmitting(false);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
