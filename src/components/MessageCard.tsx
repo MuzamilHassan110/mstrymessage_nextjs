@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
 type MessageCardProps = {
+    key?: string;
   message: Message;
   onMessageDelete: (messageId: any) => void;
 };
