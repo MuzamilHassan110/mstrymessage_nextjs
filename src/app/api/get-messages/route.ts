@@ -1,7 +1,7 @@
 import UserModal from "@/app/models/user.modal";
 import dbConnection from "@/app/lib/dbConnection";
 import { authOptions } from "../auth/[...nextauth]/options";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next"
 import { User } from  "next-auth";
 import { ResponseHelper } from "../../helpers/ResponseHelper"
 import mongoose from "mongoose";
@@ -10,8 +10,10 @@ import { NextResponse } from "next/server";
 
 export async function GET(req:Request){
     await dbConnection();
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions)
+    console.log("session",session)
     const user = session?.user as User; 
+    console.log(user)
     if(!session || session?.user){
         return ResponseHelper.jsonResponse("Unauthorized user", 401);
     }

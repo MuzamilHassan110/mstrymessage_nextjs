@@ -42,6 +42,7 @@ const Page = () => {
       identifier: data.identifier,
       password: data.password,
     });
+    
     if (restult?.error) {
       toast({
         title: "Login Failed",
@@ -53,7 +54,7 @@ const Page = () => {
       toast({
         title: "Logged In",
         description: "You have successfully logged in!",
-        variant: "destructive"
+        
       });
       router.replace("/dashboard")
     }
