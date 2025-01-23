@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/sing-in",
+    signIn: "/sign-in",
   },
   session: {
     strategy: "jwt",
@@ -60,16 +60,18 @@ export const authOptions: NextAuthOptions = {
       if (token) {
         session.user._id = token?._id;
         session.user.isVerified = token?.isVerified;
-        session.user.isAcceptingMessages = token?.isAcceptingMessages;
+        session.user.isAcceptingMessage = token?.isAcceptingMessage;
         session.user.username = token?.username;
+        session.user.token = token?.token;
       }
+
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
         token.isVerified = user.isVerified;
-        token.isAcceptingMessages = user.isAcceptingMessages;
+        token.isAcceptingMessage = user.isAcceptingMessage;
         token.username = user.username;
       }
       return token;

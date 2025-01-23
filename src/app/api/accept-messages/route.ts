@@ -6,7 +6,8 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 
 export async function POST(req: Request) {
-  await dbConnection();
+  console.log("POST");
+    await dbConnection();
 
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
+
   await dbConnection();
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
