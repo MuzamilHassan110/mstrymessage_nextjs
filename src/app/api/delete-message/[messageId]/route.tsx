@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from 'next/server';
+import mongoose from "mongoose";
 import UserModal from "@/app/models/user.modal";
 import dbConnection from "@/app/lib/dbConnection";
 import { getServerSession } from "next-auth";
@@ -6,27 +8,37 @@ import { User } from "next-auth";
 import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 
 export async function DELETE(
-  
-  { params }: { params: { messageId: string } }
+  req: NextRequest,
+  { params }: { params: { messageId: string } } // Explicit typing
 ) {
-  const messageId = params.messageId;
+  const { messageId } = params;
+
+  console.log("context.params:", params); // Debugging
+
   await dbConnection();
   const session = await getServerSession(authOptions);
+  console.log("session:", session); // Debugging
+
   const user = session?.user as User;
-  if (!session || !session?.user) {
+  console.log("user:", user); // Debugging
+
+  if (!session || !user) {
     return ResponseHelper.jsonResponse("Unauthorized user", 401);
   }
+
   try {
     const updateResult = await UserModal.updateOne(
-      { _id: user._id },
+      { _id: new mongoose.Types.ObjectId(user._id) }, // Convert to ObjectId
       { $pull: { messages: { _id: messageId } } }
     );
+
     if (updateResult.modifiedCount === 0) {
       return ResponseHelper.jsonResponse(
-        "Message not found and already deleted",
+        "Message not found or already deleted",
         404
       );
     }
+
     return ResponseHelper.jsonResponse("Message deleted successfully", 200);
   } catch (error) {
     console.error("Error in Deleting Message", error);

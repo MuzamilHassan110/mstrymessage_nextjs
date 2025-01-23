@@ -38,7 +38,6 @@ export const authOptions: NextAuthOptions = {
           } else {
             return user;
           }
-          
         } catch (error: any) {
           throw new Error(error);
         }
@@ -64,7 +63,6 @@ export const authOptions: NextAuthOptions = {
         session.user.isAcceptingMessages = token?.isAcceptingMessages;
         session.user.username = token?.username;
       }
-      console.log(session, "session ");
       return session;
     },
     async jwt({ token, user }) {

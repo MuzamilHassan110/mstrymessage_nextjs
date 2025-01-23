@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, redirect  } from "next/navigation";
 import { signinSchema } from "@/app/schemas/signInSchema";
 
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ const Page = () => {
   // Setup the form using signinSchema
   const form = useForm<z.infer<typeof signinSchema>>({
     resolver: zodResolver(signinSchema),
-    defaultValues: {
+     defaultValues: {
       identifier: "",
       password: "",
     },
@@ -42,7 +42,7 @@ const Page = () => {
       identifier: data.identifier,
       password: data.password,
     });
-    
+ 
     if (restult?.error) {
       toast({
         title: "Login Failed",
@@ -50,13 +50,15 @@ const Page = () => {
        variant: "destructive"
       });      
     } 
-    if(restult?.url){
+    if(restult?.status === 200){
       toast({
         title: "Logged In",
-        description: "You have successfully logged in!",
-        
+        description: "You have successfully logged in!",        
       });
-      router.replace("/dashboard")
+      setIsSubmitting(false);
+      form.reset();
+      redirect(`/dashboard`);
+
     }
   }
 
