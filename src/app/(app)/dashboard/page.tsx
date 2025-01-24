@@ -56,14 +56,13 @@ const page = () => {
     }
   }, [setValue]);
 
+  
   const fetchMessages = useCallback(
     async (refresh = false) => {
-      setIsSwitching(false);
-      setIsLoading(true);
       try {
-        const response = await axios.get("/api/get-message");
+        const response = await axios.get("/api/get-messages");
         setMessages(response.data?.message || []);
-  
+     
         if (refresh) {
           toast({
             title: "Success",
@@ -76,21 +75,20 @@ const page = () => {
           title: "Error",
           description:
             axiosError.response?.data?.message || "Failed to fetch messages",
-          variant: "destructive",
+            variant: "destructive",
         });
-      } finally {
-        setIsLoading(false);
-        setIsSwitching(true);
+      }finally{
+       
       }
     },
-    [setIsLoading, setMessages]
+    [] 
   );
-
+  
   useEffect(() => {
     if (!session || !session.user) return;
     fetchMessages(true);
-    // fetchAcceptMessages();
-  }, [setValue, fetchAcceptMessages, fetchMessages]);
+    fetchAcceptMessages();
+  }, [session, fetchMessages, fetchAcceptMessages]);
 
   // handle switch messages
   const handleSwitchMessages = async (checked: boolean) => {
@@ -132,6 +130,7 @@ const page = () => {
       description: "Link has been copied to your clipboard",
     });
   };
+
   if (!session || !session.user) {
     return <div>Please Login </div>;
   }
@@ -207,6 +206,8 @@ const page = () => {
         )}
       </div>
     </div>
+   
+   
   );
 };
 
