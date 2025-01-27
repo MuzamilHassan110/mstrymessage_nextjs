@@ -61,13 +61,16 @@ const page = () => {
     async (refresh = false) => {
       try {
         const response = await axios.get("/api/get-messages");
-        setMessages(response.data?.message || []);
+        setMessages(response.data?.
+          messages || []);
      
         if (refresh) {
           toast({
             title: "Success",
             description: "Messages fetched successfully",
           });
+          console.log(response);
+          console.log(messages);
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
@@ -194,11 +197,14 @@ const page = () => {
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
           messages.map((message, index) => {
-            return (
-              <MessageCard
+            return (        
+            
+               <MessageCard
+               key={message._id}
                 message={message}
                 onMessageDelete={handleDeleteMessage}
               />
+            
             );
           })
         ) : (

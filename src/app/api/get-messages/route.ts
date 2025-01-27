@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     const user = await UserModal.aggregate([
       {
         $match: {
-          id: userId,
+          _id: userId,
         },
       },
       {
@@ -48,9 +48,10 @@ export async function GET(req: Request) {
     if (!user || user.length === 0) {
       return ResponseHelper.jsonResponse("There is No Message ", 404);
     }
+   
 
     return NextResponse.json(
-      { succes: true, message: user[0].message },
+      { succes: true, messages: user[0].messages },
       { status: 200 }
     );
   } catch (error) {
