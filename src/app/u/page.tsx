@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Form } from "@/components/ui/form";
@@ -15,46 +15,23 @@ const Page = () => {
   const [questions, setQuestions] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const name = "John Doe"; 
+  const name = "John Doe";
   const { toast } = useToast();
   const { data: session } = useSession();
-  
+
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
       content: "",
     },
   });
-  
+
   // Fetch questions from server
 
   const fetchQuestions = async () => {
-    setLoading(true);
-    setError(null);
-    setQuestions(null);
-
     try {
-      // const response = await fetch("/api/suggest-messages", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      // });
-      const response = await axios.post("/api/suggest-messages")
-        console.log("response",response)
-     
-
-      const reader = response.body?.getReader();
-      const decoder = new TextDecoder("utf-8");
-      let result = "";
-
-      if (reader) {
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-          result += decoder.decode(value, { stream: true });
-        }
-      }
-
-      setQuestions(result);
+      const response = await axios.post("/api/suggest-messages");
+      console.log("response", response.data.message);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -62,35 +39,30 @@ const Page = () => {
     }
   };
 
-
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
-    
     try {
-        const response = await axios.post("api/send-message", {
-             username: session?.user?.username,  
-            content: data.content,
+      const response = await axios.post("api/send-message", {
+        username: session?.user?.username,
+        content: data.content,
+      });
+      if (response.status === 200) {
+        toast({
+          title: "Success",
+          description: "Message sent successfully",
         });
-       if(response.status === 200) {
-           toast({
-               title: "Success",
-               description: "Message sent successfully",
-           });
-           form.reset();
-       }
-        
+        form.reset();
+      }
     } catch (error) {
-       const axiosError = error as AxiosError<ApiResponse>; 
-       
-       toast({
+      const axiosError = error as AxiosError<ApiResponse>;
+
+      toast({
         title: "Error signing up",
         description: axiosError.response?.data?.message,
       });
-       
-    }
-    finally{
-        // Reset form after submission
-        form.reset();
+    } finally {
+      // Reset form after submission
+      form.reset();
     }
   };
 
@@ -130,22 +102,30 @@ const Page = () => {
       </div> */}
 
       <section className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
-      <h1 className="text-2xl font-bold text-gray-700 mb-4">AI Question Generator</h1>
-      <button
-        onClick={fetchQuestions}
-        disabled={loading}
-        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-blue-300"
-      >
-        {loading ? "Generating..." : "Generate Questions"}
-      </button>
-      {error && <p className="text-red-500 mt-4">{error}</p>}
-      {questions && (
-        <div className="mt-6 p-4 bg-white rounded shadow">
-          <h2 className="font-bold text-lg mb-2">Generated Questions:</h2>
-          <>{questions.split("||").map((q, i) => <div key={i}>{i + 1}. {q}</div>)}</>
-        </div>
-      )}
-    </section>
+        <h1 className="text-2xl font-bold text-gray-700 mb-4">
+          AI Question Generator
+        </h1>
+        <button
+          onClick={fetchQuestions}
+          disabled={loading}
+          className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-blue-300"
+        >
+          {loading ? "Generating..." : "Generate Questions"}
+        </button>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
+        {questions && (
+          <div className="mt-6 p-4 bg-white rounded shadow">
+            <h2 className="font-bold text-lg mb-2">Generated Questions:</h2>
+            <>
+              {questions.split("||").map((q, i) => (
+                <div key={i}>
+                  {i + 1}. {q}
+                </div>
+              ))}
+            </>
+          </div>
+        )}
+      </section>
     </div>
   );
 };
