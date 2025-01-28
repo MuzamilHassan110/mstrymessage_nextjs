@@ -6,6 +6,7 @@ import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 export async function POST(req: Request) {
   await dbConnection();
   const { username, content } = await req.json();
+  console.log(username, content)
 
   try {
     const user = await UserModal.findOne({ username });
