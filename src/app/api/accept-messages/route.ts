@@ -11,6 +11,7 @@ export async function POST(req: Request) {
 
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
+  console.log("user", user, session, "session");
 
   if (!session || !user) {
     return ResponseHelper.jsonResponse("Unauthenticated user", 401);
@@ -18,14 +19,15 @@ export async function POST(req: Request) {
 
   try {
     const userId = user?._id;
-    const { acceptingMessage } = await req.json();
+    const { isAcceptingMessage } = await req.json();
+    console.log("Authent", isAcceptingMessage);
 
     const updatedUser = await UserModal.findByIdAndUpdate(
       userId,
-      { isAcceptingMessage: acceptingMessage },
+      { isAcceptingMessage : isAcceptingMessage},
       { new: true }
     );
-
+console.log("Update User",updatedUser)
     if (!updatedUser) {
       return ResponseHelper.jsonResponse(
         "Failed to update user message accepting",

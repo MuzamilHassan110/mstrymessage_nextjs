@@ -39,10 +39,8 @@ const page = () => {
 
   const fetchAcceptMessages = useCallback(async () => {
     try {
-      const response = await axios.get<ApiResponse>("/api/accept-messages", {
-        
-      });
-      setValue("acceptMessages", response.data.isAccesptingMessage);
+      const response = await axios.get<ApiResponse>("/api/accept-messages");
+      setValue("acceptMessages", response.data?.isAccesptingMessage);
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -96,10 +94,12 @@ const page = () => {
   // handle switch messages
   const handleSwitchMessages = async (checked: boolean) => {
     setIsSwitching(true);
+    console.log(`handleSwitchMessages`, checked);
     try {
       const response = await axios.post<ApiResponse>(`/api/accept-messages`, {
         isAcceptingMessage: checked,
       });
+      console.log("accepting response",response);
       setValue("acceptMessages", checked);
       toast({
         title: "Success",

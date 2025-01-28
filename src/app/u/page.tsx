@@ -12,6 +12,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useSession } from "next-auth/react";
 
 const Page = () => {
+  const [questions, setQuestions] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const name = "John Doe"; 
   const { toast } = useToast();
   const { data: session } = useSession();
@@ -22,6 +25,43 @@ const Page = () => {
       content: "",
     },
   });
+  
+  // Fetch questions from server
+
+  const fetchQuestions = async () => {
+    setLoading(true);
+    setError(null);
+    setQuestions(null);
+
+    try {
+      // const response = await fetch("/api/suggest-messages", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      // });
+      const response = await axios.post("/api/suggest-messages")
+        console.log("response",response)
+     
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder("utf-8");
+      let result = "";
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          result += decoder.decode(value, { stream: true });
+        }
+      }
+
+      setQuestions(result);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
@@ -41,18 +81,22 @@ const Page = () => {
         
     } catch (error) {
        const axiosError = error as AxiosError<ApiResponse>; 
-       console.error("API Error:", axiosError.response?.data?.message); 
+       
        toast({
         title: "Error signing up",
         description: axiosError.response?.data?.message,
       });
        
     }
+    finally{
+        // Reset form after submission
+        form.reset();
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
-      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-3xl text-center space-y-6">
+      {/* <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-3xl text-center space-y-6">
         <h1 className="text-2xl font-bold text-gray-800">Public Profile Link</h1>
         <p className="text-gray-600 text-sm">
           Send your anonymous message to{" "}
@@ -60,7 +104,7 @@ const Page = () => {
         </p>
 
         <Form {...form}>
-          {/* Connect handleSubmit to the form */}
+        
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Textarea
               rows={3}
@@ -68,7 +112,7 @@ const Page = () => {
               placeholder="Write your message here..."
               {...form.register("content")}
             />
-            {/* Show error message if validation fails */}
+            
             {form.formState.errors.content && (
               <p className="text-red-500">
                 {form.formState.errors.content.message}
@@ -83,7 +127,25 @@ const Page = () => {
             </button>
           </form>
         </Form>
-      </div>
+      </div> */}
+
+      <section className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
+      <h1 className="text-2xl font-bold text-gray-700 mb-4">AI Question Generator</h1>
+      <button
+        onClick={fetchQuestions}
+        disabled={loading}
+        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 disabled:bg-blue-300"
+      >
+        {loading ? "Generating..." : "Generate Questions"}
+      </button>
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {questions && (
+        <div className="mt-6 p-4 bg-white rounded shadow">
+          <h2 className="font-bold text-lg mb-2">Generated Questions:</h2>
+          <>{questions.split("||").map((q, i) => <div key={i}>{i + 1}. {q}</div>)}</>
+        </div>
+      )}
+    </section>
     </div>
   );
 };

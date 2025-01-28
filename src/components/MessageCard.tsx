@@ -30,7 +30,7 @@ type MessageCardProps = {
 };
 const MessageCard = ({ message, onMessageDelete, key }: MessageCardProps) => {
   const { toast } = useToast();
-  console.log("message card", message);
+
   const handleConfirmDelete = async () => {
     const response = await axios.delete(`/api/delete-message/${message._id}`);
     toast({
@@ -41,37 +41,37 @@ const MessageCard = ({ message, onMessageDelete, key }: MessageCardProps) => {
   };
   return (
     <div key={key}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="destructive">
-                <X className="w-5 h-5 " />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleConfirmDelete}>
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <CardDescription>{message.content}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-      </Card>
+     <Card>
+  <CardHeader className="flex flex-row justify-between items-center ">
+    <CardTitle >Card Title</CardTitle> {/* Ensure text is white */}
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">
+          <X className="w-5 h-5 text-white" /> {/* Set text color */}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete
+            your account and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleConfirmDelete}>
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  </CardHeader>
+  <CardContent>
+    {message.content}
+  </CardContent>
+</Card>
+
     </div>
   );
 };

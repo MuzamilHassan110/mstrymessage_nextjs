@@ -1,8 +1,6 @@
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 
-
-
 const openaiClient = new openai.OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
