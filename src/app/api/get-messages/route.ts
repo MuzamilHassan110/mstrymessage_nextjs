@@ -8,17 +8,14 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
-  console.log("GET");
   await dbConnection();
   const session = await getServerSession(authOptions);
   const user = session?.user as User;
-  console.log("user", user, session, "session");
 
   if (!session) {
     return ResponseHelper.jsonResponse("Unauthorized user", 401);
   }
   const userId = new mongoose.Types.ObjectId(user._id);
-  console.log("userId: " + userId);
 
   try {
     const user = await UserModal.aggregate([

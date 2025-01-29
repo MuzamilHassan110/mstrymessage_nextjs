@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react"
-import axios, { type AxiosError } from "axios"
+import axios from "axios"
 import { useToast } from "@/hooks/use-toast"
 import type { Message } from "@/app/models/user.modal"
-import type { ApiResponse } from "@/app/types/apiResponse"
+
 
 export function useMessages() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -13,8 +13,8 @@ export function useMessages() {
     async (refresh = false) => {
       setIsLoading(true)
       try {
-        const response = await axios.get("/api/get-messages")
-        setMessages(response.data?.message || [])
+        const response = await axios.get("/api/get-messages");
+         setMessages(response.data?.messages || [])
         if (refresh) {
           toast({
             title: "Success",

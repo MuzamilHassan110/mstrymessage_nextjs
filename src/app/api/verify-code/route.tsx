@@ -2,7 +2,6 @@ import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 import dbConnection from "@/app/lib/dbConnection";
 import UserModal from "@/app/models/user.modal";
 import { NextRequest } from "next/server";
-
 export async function POST(request: NextRequest) {
   await dbConnection();
   try {

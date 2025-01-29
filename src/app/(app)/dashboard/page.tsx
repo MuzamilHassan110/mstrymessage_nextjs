@@ -1,5 +1,5 @@
 "use client"
-import { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,8 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import MessageCard from "@/components/MessageCard"
-import type { Message } from "@/app/models/user.modal"
-import type { ApiResponse } from "@/app/types/apiResponse"
+import { Input } from "@/components/ui/input"
+
 
 export default function UserDashboard() {
   const { data: session } = useSession()
@@ -85,7 +85,7 @@ export default function UserDashboard() {
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>
         <div className="flex items-center">
-          <input type="text" value={profileUrl} readOnly className="input input-bordered w-full p-2 mr-2" />
+          <Input type="text" value={profileUrl} readOnly className="input input-bordered w-full p-2 mr-2" />
           <Button onClick={handleCopyToClipboard}>Copy</Button>
         </div>
       </div>
@@ -116,10 +116,12 @@ export default function UserDashboard() {
       </Button>
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {messages.length > 0 ? (
-          messages.map((message) => 
+          messages.map((message, index) => 
+          <React.Fragment key={index}>
           <MessageCard 
             message={message} 
           onMessageDelete={deleteMessage} />
+          </React.Fragment>
         )
         ) : (
           <p>No Messages to Display</p>

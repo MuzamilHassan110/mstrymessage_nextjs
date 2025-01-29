@@ -12,8 +12,13 @@ export function useAcceptMessages() {
     async (checked: boolean) => {
       setIsSwitching(true)
       try {
-        const response = await axios.post<ApiResponse>(`/api/accept-messages`, {
+        await axios.post<ApiResponse>(`/api/accept-messages`, {
           isAcceptingMessage: checked,
+        });
+        toast({
+          title: "Success",
+          description: "Message is Accepted",
+          
         })
         setAcceptMessages(checked)
       } catch (error) {

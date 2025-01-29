@@ -13,23 +13,17 @@ export async function DELETE(
   request: Request, { params }: { params: { messageId: string } } 
 )  {
   const { messageId } = params;
-
-  console.log("context.params:", params);
-
   await dbConnection();
   const session = await getServerSession(authOptions);
-  console.log("session:", session); // Debugging
 
-  const user = session?.user as User;
-  console.log("user:", user); // Debugging
-
+  const user = session?.user as User; 
   if (!session || !user) {
     return ResponseHelper.jsonResponse("Unauthorized user", 401);
   }
 
   try {
     const updateResult = await UserModal.updateOne(
-      { _id: new mongoose.Types.ObjectId(user._id) }, // Convert to ObjectId
+      { _id: new mongoose.Types.ObjectId(user._id) },
       { $pull: { messages: { _id: messageId } } }
     );
 

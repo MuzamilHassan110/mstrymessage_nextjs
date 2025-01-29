@@ -2,7 +2,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,8 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
-import { Key, X } from "lucide-react";
-import { Message } from "@/app/models/user.modal";
+import {  X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
@@ -32,7 +30,7 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
   const { toast } = useToast();
 
   const handleConfirmDelete = async () => {
-    const response = await axios.delete(`/api/delete-message/${message._id}`);
+     await axios.delete(`/api/delete-message/${message._id}`);
     toast({
       title: "Success",
       description: "Message deleted successfully",
@@ -40,8 +38,8 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
     onMessageDelete(message?._id);
   };
   return (
-    <>
-     <Card key={message.username}>
+    <div key={message._id}>
+     <Card >
   <CardHeader className="flex flex-row justify-between items-center ">
     <CardTitle >Card Title</CardTitle> {/* Ensure text is white */}
     <AlertDialog>
@@ -72,7 +70,7 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
   </CardContent>
 </Card>
 
-    </>
+    </div>
   );
 };
 

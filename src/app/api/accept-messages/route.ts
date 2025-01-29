@@ -6,12 +6,10 @@ import { authOptions } from "../auth/[...nextauth]/options";
 import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 
 export async function POST(req: Request) {
-  console.log("POST");
-    await dbConnection();
+  await dbConnection();
 
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
-  console.log("user", user, session, "session");
 
   if (!session || !user) {
     return ResponseHelper.jsonResponse("Unauthenticated user", 401);
@@ -20,14 +18,13 @@ export async function POST(req: Request) {
   try {
     const userId = user?._id;
     const { isAcceptingMessage } = await req.json();
-    console.log("Authent", isAcceptingMessage);
 
     const updatedUser = await UserModal.findByIdAndUpdate(
       userId,
-      { isAcceptingMessage : isAcceptingMessage},
+      { isAcceptingMessage: isAcceptingMessage },
       { new: true }
     );
-console.log("Update User",updatedUser)
+
     if (!updatedUser) {
       return ResponseHelper.jsonResponse(
         "Failed to update user message accepting",
@@ -46,7 +43,6 @@ console.log("Update User",updatedUser)
 }
 
 export async function GET() {
-
   await dbConnection();
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;

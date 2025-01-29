@@ -41,6 +41,10 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
       try {
         const response = await axios.post(endpoint, data);
         if (response.status === 200) {
+          toast({
+            title: "Success",
+            description: "Message sent successfully",
+          });
           return response.data;
         }
       } catch (error) {
@@ -57,26 +61,19 @@ const Page = ({ params }: { params: Promise<{ username: string }> }) => {
     },
     [toast]
   );
-
   const sendMessage = makeApiCall("/api/send-message");
   const getSuggestedMessages = makeApiCall("/api/suggest-messages");
 
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
-    await sendMessage({ username, content: data.content });
-    toast({
-      title: "Success",
-      description: "message send successfully",
-    });
+  const result =  await sendMessage({ username, content: data.content });
+   
     form.reset();
   };
 
   const submitMessage = async (message: string) => {
     await sendMessage({ username, content: message });
     setSelectedMessage(message);
-    toast({
-      title: "Success",
-      description: "message send successfully",
-    });
+   
   };
 
   const handleSuggestedMessage = async () => {

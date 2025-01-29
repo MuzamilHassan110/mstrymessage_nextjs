@@ -53,8 +53,7 @@ export async function GET(NextRequest: Request) {
       }
     );
   } catch (error) {
-    console.log("Error in Fetching username", error);
-    return NextResponse.json(
+      return NextResponse.json(
       { message: "Error in Fetching Username" },
       { status: 500 }
     );
