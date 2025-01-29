@@ -200,7 +200,7 @@ const page = () => {
             return (        
             
                <MessageCard
-               key={message._id}
+                 key={message._id}
                 message={message}
                 onMessageDelete={handleDeleteMessage}
               />

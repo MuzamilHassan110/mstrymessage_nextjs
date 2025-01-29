@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     if (!user) {
       return ResponseHelper.jsonResponse("User not found", 404);
     }
+    console.log("User", user);
     // User Accepting the messages
     if (!user.isAcceptingMessage) {
       return ResponseHelper.jsonResponse("User is not accepting messages", 403);
