@@ -1,5 +1,7 @@
+import { Message } from "../models/user.modal";
+
 export interface ApiResponse {
     success: boolean;
-    message: string;
+    message: string ;
     isAccesptingMessage?: boolean;
 }

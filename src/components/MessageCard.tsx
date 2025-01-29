@@ -23,12 +23,12 @@ import { Message } from "@/app/models/user.modal";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 
-type MessageCardProps = {
-  key: any,
+type MessageCardProps = {  
+  
   message: any;
   onMessageDelete: (messageId: any) => void;
 };
-const MessageCard = ({ message, onMessageDelete, key }: MessageCardProps) => {
+const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
   const { toast } = useToast();
 
   const handleConfirmDelete = async () => {
@@ -40,8 +40,8 @@ const MessageCard = ({ message, onMessageDelete, key }: MessageCardProps) => {
     onMessageDelete(message?._id);
   };
   return (
-    <div key={key}>
-     <Card>
+    <>
+     <Card key={message.username}>
   <CardHeader className="flex flex-row justify-between items-center ">
     <CardTitle >Card Title</CardTitle> {/* Ensure text is white */}
     <AlertDialog>
@@ -72,7 +72,7 @@ const MessageCard = ({ message, onMessageDelete, key }: MessageCardProps) => {
   </CardContent>
 </Card>
 
-    </div>
+    </>
   );
 };
 

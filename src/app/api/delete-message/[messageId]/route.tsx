@@ -7,13 +7,14 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import { User } from "next-auth";
 import { ResponseHelper } from "@/app/helpers/ResponseHelper";
 
+
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { messageId: string } } // Explicit typing
-) {
+  request: Request, { params }: { params: { messageId: string } } 
+)  {
   const { messageId } = params;
 
-  console.log("context.params:", params); // Debugging
+  console.log("context.params:", params);
 
   await dbConnection();
   const session = await getServerSession(authOptions);
